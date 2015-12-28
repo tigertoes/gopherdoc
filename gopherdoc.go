@@ -6,13 +6,17 @@ import (
 	"log"
 	"net"
 	"os/exec"
+    "flag"
 	"strings"
 )
 
 const serverString string = "gopherdoc"
 
 func main() {
-	server, err := net.Listen("tcp", "localhost:7000")
+    var port = flag.String("port", "7000", "Default port to bind to")
+    flag.Parse()
+
+	server, err := net.Listen("tcp", "localhost:" + *port)
 	if err != nil {
 		log.Panicln("Couldn't start listening: " + err.Error())
 	}

@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"log"
 	"net"
 	"os/exec"
@@ -47,7 +46,6 @@ func handleRequest(client net.Conn) {
 		if err != nil {
 			break
 		}
-		fmt.Println(string(line))
 		time := time.Now().Format(time.RFC3339)
 		path := strings.TrimSpace(string(line[:]))
 		// TODO: Fix the logging here

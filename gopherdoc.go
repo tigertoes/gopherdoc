@@ -49,7 +49,7 @@ func handleRequest(client net.Conn) {
 		time := time.Now().Format(time.RFC3339)
 		path := strings.TrimSpace(string(line[:]))
 		// TODO: Fix the logging here
-		log.Println(time + " - " + path)
+		log.Println(path)
 
 		// TODO: router goes here
 		// FIXME: channel, not return

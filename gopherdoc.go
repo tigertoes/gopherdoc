@@ -45,7 +45,6 @@ func handleRequest(client net.Conn) {
 		if err != nil {
 			break
 		}
-		time := time.Now().Format(time.RFC3339)
 		path := strings.TrimSpace(string(line[:]))
 		// TODO: Fix the logging here
 		log.Println(path)

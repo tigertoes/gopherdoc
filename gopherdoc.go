@@ -59,35 +59,24 @@ func handleRequest(client net.Conn) {
 }
 
 func goDocRouter(path string) string {
-	// We assume the path will look either look like /package or /package/thing
-	// e.g:
-	// * /buf
-	// * /buf/ScanLines
-	// Anything else is an error, that means appended slashes! What do you think
-	// this is, HTTP?
-	// FIXME: So much room for failure here, RFC too vague like every other RFC
-	// with a number less than 4000
-	// FIXME: lynx chomps the first 2 bytes of the request, other agents MAY
+	// We expect paths
+    // FIXME: lynx chomps the first 2 bytes of the request, other agents MAY
 	// NOT, so we may have to strip "/1" from requests
 	if path == "/" || path == "" {
 		return ("iSorry, index listing isn't supported yet :[")
 	}
-	lookup := strings.Split(path, "/")
-	if len(lookup) == 2 {
-		res := formatGoDoc(string(lookup[1]))
-		return res.String()
-	}
-	if len(lookup) == 3 {
-		return ("Request: " + lookup[1] + " - " + lookup[2])
-	}
-	// MAGIC GOES HERE
-	return ("iInvalid URL!")
+	split := strings.Split(path, "/")
+    if len(split) == 0 || len(split) > 3 {
+        return ("iInvalid URL!")
+    }
+    paths := split[1:]
+	res := formatGoDoc(paths...)
+    return res.String()
 }
 
-func formatGoDoc(path string) bytes.Buffer {
+func formatGoDoc(paths ...string) bytes.Buffer {
 	var res bytes.Buffer
-
-	cmd := exec.Command("godoc", path)
+	cmd := exec.Command("godoc", paths...)
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		log.Fatal(err)

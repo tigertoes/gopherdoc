@@ -3,20 +3,20 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"flag"
 	"log"
 	"net"
 	"os/exec"
-    "flag"
 	"strings"
 )
 
 const serverString string = "gopherdoc"
 
 func main() {
-    var port = flag.String("port", "7000", "Default port to bind to")
-    flag.Parse()
+	var port = flag.String("port", "7000", "Default port to bind to")
+	flag.Parse()
 
-	server, err := net.Listen("tcp", "localhost:" + *port)
+	server, err := net.Listen("tcp", "localhost:"+*port)
 	if err != nil {
 		log.Panicln("Couldn't start listening: " + err.Error())
 	}
@@ -64,18 +64,18 @@ func handleRequest(client net.Conn) {
 
 func goDocRouter(path string) string {
 	// We expect paths
-    // FIXME: lynx chomps the first 2 bytes of the request, other agents MAY
+	// FIXME: lynx chomps the first 2 bytes of the request, other agents MAY
 	// NOT, so we may have to strip "/1" from requests
 	if path == "/" || path == "" {
 		return ("iSorry, index listing isn't supported yet :[")
 	}
 	split := strings.Split(path, "/")
-    if len(split) == 0 || len(split) > 3 {
-        return ("iInvalid URL!")
-    }
-    paths := split[1:]
+	if len(split) == 0 || len(split) > 3 {
+		return ("iInvalid URL!")
+	}
+	paths := split[1:]
 	res := formatGoDoc(paths...)
-    return res.String()
+	return res.String()
 }
 
 func formatGoDoc(paths ...string) bytes.Buffer {

@@ -7,7 +7,6 @@ import (
 	"net"
 	"os/exec"
 	"strings"
-	"time"
 )
 
 const serverString string = "gopherdoc"
